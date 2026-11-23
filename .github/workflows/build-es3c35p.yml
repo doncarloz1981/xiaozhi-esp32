@@ -1,0 +1,21 @@
+name: Build ES3C35P
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.4
+          target: esp32s3
+          command: |
+            echo "CONFIG_BOARD_TYPE_LCDWIKI_ES3C35P=y" >> sdkconfig.defaults
+            idf.py set-target esp32s3
+            idf.py build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: build/merged-binary.bin
